@@ -10,14 +10,19 @@ import java.util.Scanner;
 public class SqlConnectionConfig {
 
     public Connection connection() {
-
+        //create connection object
         Connection con = null;
         try {
+            //database url
             String url = "jdbc:mysql://localhost:3306/playerregistration";
+            //database credentials
             String usename = "root";
             String password1 = "rini";
 
+            //registering jdbc driver
             Class.forName("com.mysql.cj.jdbc.Driver");
+
+            //opening a connection
             con = DriverManager.getConnection(url, usename, password1);
             if (con != null) {
                 System.out.println("Connected to database...........");
@@ -31,23 +36,24 @@ public class SqlConnectionConfig {
     public void insertRegistrationData() throws SQLException {
         System.out.println("Enter mobilenumber:");
         Scanner scanner1 = new Scanner(System.in);
-        int mobile_number = scanner1.nextInt();
+        long mobile_number = scanner1.nextLong();
         System.out.println("Enter  name:");
         Scanner scanner2 = new Scanner(System.in);
         String name = scanner2.next();
-        System.out.println("Enter password");
+        System.out.println("Enter PIN");
         Scanner scanner3 = new Scanner(System.in);
         String password = scanner3.next();
         System.out.print("Enter the amount to add:");
         Scanner scanner5 = new Scanner(System.in);
-        int amount = scanner5.nextInt();
+        long amount = scanner5.nextLong();
 
-        String sql = "INSERT INTO registration (mobile_number,name, password,amount) VALUES (?, ?, ?,?)";
+        //insert query
+        String sql = "INSERT INTO playerdetails (mobile_number,name, password,amount,gamemode,gamelevel) VALUES (?, ?, ?,?,'N','0')";
         PreparedStatement insertStatement = connection().prepareStatement(sql);
-        insertStatement.setInt(1, mobile_number);
+        insertStatement.setLong(1, mobile_number);
         insertStatement.setString(2, name);
         insertStatement.setString(3, password);
-        insertStatement.setInt(4, amount);
+        insertStatement.setLong(4, amount);
         int rowsInserted = insertStatement.executeUpdate();
         if (rowsInserted > 0) {
             System.out.println("Inserted");
@@ -55,38 +61,51 @@ public class SqlConnectionConfig {
     }
 
 
+   /*
+   Method to collect and check the login credentials
+   This will check whether an user is previously registered or not using the mobile number entered.
+    */
     public void loginData() throws SQLException {
-        Gameoptions gameoptions=new Gameoptions();
+        Gameoptions gameoptions = new Gameoptions();
         System.out.println("Enter mobile number:");
         Scanner scanner5 = new Scanner(System.in);
-       int mobilenumber = scanner5.nextInt();
+        long mobilenumber = scanner5.nextLong();
 
         System.out.println("Enter password:");
         Scanner scanner6 = new Scanner(System.in);
         String password = scanner6.next();
-        String queryCheck = "SELECT * from registration WHERE mobile_number='" + mobilenumber + "'";
+        //query to check whether the entered mobile number is there in the databse.
+        String queryCheck = "SELECT * from playerdetails WHERE mobile_number='" + mobilenumber + "'"
+                + "and password='" + password + "'";
         Statement st = connection().createStatement();
-        ResultSet rs = st.executeQuery(queryCheck); // execute the query, and get a java resultset
+        //obtaining resultset after executing the query
+        ResultSet rs = st.executeQuery(queryCheck);
 
 
         if (rs.absolute(1)) {
             System.out.println("Logged succesfully....");
 
+            //variable to store the level of game
             int gl = rs.getInt("gamelevel");
+            //variable to store the balance amount
             int am = rs.getInt("amount");
-            String gd = rs.getString("gamemode");
+            //variable to store the game mode ,whether it is in forward direction or backward.
+           String gd = rs.getString("gamemode");
+
 
 
             if (gd.equals("F")) {
 
 
+               // System.out.println("Current Login level " + gl);
+                if (gl < 10) {
 
-                System.out.println("Current Login level " + gl);
-                if (gl < 10 ) {
-
+                    //creating object for SqlConnectionConfig class
                     SqlConnectionConfig ds = new SqlConnectionConfig();
+                    //variable to store day of week
                     DayOfWeek finas = ds.getDayNumberOld();
                     int limit = 0;
+                    //setting minimum balance as 20 for weekends and 10 for working days
                     switch (finas) {
                         case SATURDAY:
                             limit = 20;
@@ -96,20 +115,18 @@ public class SqlConnectionConfig {
                             limit = 10;
                     }
 
-                    System.out.println("Balance Low , Please recharge " + finas);
-                    System.out.println("Limit  " + limit);
+                   // System.out.println("Balance Low , Please recharge " + finas);
+                    //System.out.println("Limit  " + limit);
                     if (am < limit) {
                         System.out.println("Balance Low , Please recharge ");
                     } else {
-                        gameoptions.gameSelection(mobilenumber, gl,gd);
+                        gameoptions.gameSelection(mobilenumber, gl, gd);
                     }
                 } else {
                     System.out.println("Game Over...........");
                 }
-            }
-            else
-            {
-                System.out.println("Current Login level " + gl);
+            } else {
+               // System.out.println("Current Login level " + gl);
                 if (gl >= 0) {
 
                     SqlConnectionConfig ds = new SqlConnectionConfig();
@@ -125,33 +142,34 @@ public class SqlConnectionConfig {
                     }
 
                     //System.out.println("Balance Low , Please recharge " + finas);
-                    System.out.println("Limit  " + limit);
+                    //System.out.println("Limit  " + limit);
                     if (am < limit) {
                         System.out.println("Balance Low , Please recharge ");
                     } else {
-                        gameoptions.gameSelection(mobilenumber, gl ,gd);
+                        gameoptions.gameSelection(mobilenumber, gl, gd);
                     }
                 } else {
                     System.out.println("Game Over...........");
                 }
             }
-        }else {
+        } else {
             System.out.println("Not registered...........");
         }
-//return mobilenumber;
+
     }
+
+   //method to recharge the user account
     public void addMoney() throws SQLException {
         System.out.println("Enter mobilenumber:");
         Scanner scanner8 = new Scanner(System.in);
-        int mob=scanner8.nextInt();
+        long mob = scanner8.nextLong();
         System.out.println("Enter the amount:");
         Scanner scanner7 = new Scanner(System.in);
         int newamount = scanner7.nextInt();
 
-        String querytoADD = "UPDATE registration "
+        String querytoADD = "UPDATE playerdetails "
                 + "SET amount = amount + '" + newamount + "'"
                 + "WHERE mobile_number='" + mob + "'";
-
 
 
         Statement st1 = connection().createStatement();
@@ -159,11 +177,13 @@ public class SqlConnectionConfig {
     }
 
     public DayOfWeek getDayNumberOld() {
+        //display the current date
         LocalDate date = LocalDate.now();
+        //getting day of week from current date
         DayOfWeek day = DayOfWeek.of(date.get(ChronoField.DAY_OF_WEEK));
         return day;
-        }
     }
+}
 
 
 

@@ -8,8 +8,6 @@ public class Formpage {
     SqlConnectionConfig sqlConnectionConfig = new SqlConnectionConfig();
 
     public void registerPlayer() throws SQLException {
-
-
         sqlConnectionConfig.insertRegistrationData();
     }
 

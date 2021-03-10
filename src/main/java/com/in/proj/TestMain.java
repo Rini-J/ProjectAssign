@@ -8,9 +8,11 @@ public class TestMain {
         SqlConnectionConfig sqlConnectionConfig=new SqlConnectionConfig();
 
         System.out.println("Enter the options...");
-        System.out.println("Enter 1 for REGISTRATION");
-        System.out.println("Enter 2 for LOGIN");
-        System.out.print("Enter 3 for Adding Money to your account");
+        System.out.println("Enter 1 for Registration");
+        System.out.println("Enter 2 for Login");
+        System.out.println("Enter 3 for Adding Money to your account");
+        System.out.println ("Enter 4 for Exit");
+
         Scanner scanner = new Scanner(System.in);
         int Option = scanner.nextInt();
         Formpage formpage = new Formpage();
@@ -32,6 +34,11 @@ public class TestMain {
             case 3:
                 System.out.println("AddMoney");
                 formpage.addMoneytoAcc();
+
+                break;
+            case 4:
+                System.out.println("Bye");
+
 
                 break;
             default:

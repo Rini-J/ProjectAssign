@@ -6,16 +6,18 @@ import java.util.Scanner;
 
 public class Gameoptions {
 
-    public void gameSelection(int mob ,int gl ,String gd) throws SQLException {
+    public void gameSelection(long mob ,int gl ,String gd) throws SQLException {
         SqlConnectionConfig connectionConfig=new SqlConnectionConfig();
-        System.out.println("Value inside game select " +mob);
+        //System.out.println("Value inside game select " +mob);
+        //creating object for Gameoptions class
         Gameoptions game=new Gameoptions();
+        //variable for holding game level
         int nextg;
-        System.out.println("Value inside game Mode" +gd);
+       // System.out.println("Value inside game Mode" +gd);
         if (gl >0 ) {
             if (gd.equals("F"))
             {
-                System.out.println("IF " +gd);
+               // System.out.println("IF " +gd);
                  nextg = gl + 1;
             }
             else
@@ -24,23 +26,22 @@ public class Gameoptions {
                 System.out.println("else " +gd);
             }
 
-            System.out.println("You have Played " +gl +"Next Game is " +nextg);
+            System.out.println("You have Played " +gl + "  Next Game Level is " +nextg);
             game.option2(mob,nextg);
         }
         else
         {
         System.out.println("Select the game Mode - Press \"F \" For Level 1 to 10 . Press \"B\" for  10 to 1 ");
-       // System.out.println("Enter F forward direction");
-        //System.out.print("Enter B forward direction");
         Scanner g=new Scanner(System.in);
         String gameoption=g.next();
-
-            String querytoADD = "UPDATE registration "
+            //query to update the game mode
+            String querytoADD = "UPDATE playerdetails "
                     + "SET gamemode ='" + gameoption + "'"
                     + "WHERE mobile_number='" + mob + "'";
 
             Statement st1 = connectionConfig.connection().createStatement();
-            st1.executeUpdate(querytoADD); // execute the query, and get a java resultset
+            // execute the query, and get a java resultset
+            st1.executeUpdate(querytoADD);
 
 
         switch (gameoption){
@@ -57,14 +58,14 @@ public class Gameoptions {
         }}
 
     }
-    public void option2(int mob, int nextg) throws SQLException {
+    public void option2(long mob, int nextg) throws SQLException {
         GamePage gamePage=new GamePage();
-        System.out.println("Enter Y to START");
+        System.out.println("Enter S to START");
         Scanner inp =new Scanner(System.in);
         String select=inp.next();
         System.out.println("Starting......");
 
-        System.out.println("Enter N to END");
+        System.out.println("Enter E to END");
         Scanner innewp =new Scanner(System.in);
         String seend=innewp.next();
 

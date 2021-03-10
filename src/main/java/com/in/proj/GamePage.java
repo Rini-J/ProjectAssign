@@ -4,24 +4,26 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class GamePage {
-    SqlConnectionConfig sq=new SqlConnectionConfig();
+    SqlConnectionConfig sq = new SqlConnectionConfig();
 
-    public void startGame(){
+    public void startGame() {
         System.out.print("Game started........");
 
     }
-    public void endGame(int mob,int nextg) throws SQLException {
-NextGamePage nextgame = new NextGamePage();
-        System.out.println("inside endg game for number :" +mob);
 
+    /*
+     Updates the balance amount and game level of the player after each game
+     @Param mobilenumber -Mobile number of player
+     @Param nextg-nextgame level
 
+    */
+    public void endGame(long mob, int nextg) throws SQLException {
+        NextGamePage nextgame = new NextGamePage();
+        //System.out.println("inside endg game for number :" + mob);
 
-       // int  mn=sq.loginData();
-       // System.out.print(mn);
-        //long mn=987;
-        String querytoEND = "UPDATE registration "
+        String querytoEND = "UPDATE playerdetails "
                 + "SET amount = amount - '10'" + ", gamelevel ='" + nextg + "'"
-                + "WHERE mobile_number='" + mob + "'" ;
+                + "WHERE mobile_number='" + mob + "'";
         Statement game = sq.connection().createStatement();
         game.executeUpdate(querytoEND);
         nextgame.toContinue(mob);
