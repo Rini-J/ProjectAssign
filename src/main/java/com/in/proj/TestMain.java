@@ -8,8 +8,8 @@ public class TestMain {
         SqlConnectionConfig sqlConnectionConfig=new SqlConnectionConfig();
 
         System.out.println("Enter the options...");
-        System.out.println("Enter 1 for Registration");
-        System.out.println("Enter 2 for Login");
+        System.out.println("Enter 1 for Player Registration");
+        System.out.println("Enter 2 for PLayer Login");
         System.out.println("Enter 3 for Adding Money to your account");
         System.out.println ("Enter 4 for Exit");
 

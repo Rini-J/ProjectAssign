@@ -56,7 +56,7 @@ public class SqlConnectionConfig {
         insertStatement.setLong(4, amount);
         int rowsInserted = insertStatement.executeUpdate();
         if (rowsInserted > 0) {
-            System.out.println("Inserted");
+            System.out.println("Player successfully Registered ");
         }
     }
 
@@ -92,7 +92,7 @@ public class SqlConnectionConfig {
             //variable to store the game mode ,whether it is in forward direction or backward.
            String gd = rs.getString("gamemode");
 
-
+            System.out.println("Current Account Balance is  " + am);
 
             if (gd.equals("F")) {
 

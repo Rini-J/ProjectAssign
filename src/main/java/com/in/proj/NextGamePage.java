@@ -26,7 +26,7 @@ public class NextGamePage {
             int am = newrs.getInt("amount");
             String gd = newrs.getString("gamemode");
             //System.out.println("Current Login level " + gl);
-
+            System.out.println("Current Account Balance is  " + am);
             if (gd.equals("F")) {
 
 
